@@ -437,8 +437,8 @@ public class Player {
 
   public static final List<WriterFunction<Player>> PROPERTIES_LIST = new ArrayList<>(PROPERTIES.values());
 
-  public static final List<WriterFunction<Player>> PROPERTIES_LIST_PRIVACY =
-      PROPERTIES.keySet().stream().filter(key -> !key.equals("steamId") && !key.equals("savedNetworkAddress")).map(PROPERTIES::get).collect(Collectors.toList());
+  //public static final List<WriterFunction<Player>> PROPERTIES_LIST_PRIVACY =
+  //    PROPERTIES.keySet().stream().filter(key -> !key.equals("steamId") && !key.equals("savedNetworkAddress")).map(PROPERTIES::get).collect(Collectors.toList());
 
   public void writeAllProperties(JsonGenerator generator, DataContext context, boolean writeEmpty, boolean noPrivacy) throws IOException {
     if (noPrivacy) {
@@ -446,9 +446,9 @@ public class Player {
         writer.accept(this, generator, context, writeEmpty);
       }
     } else {
-      for (WriterFunction<Player> writer: PROPERTIES_LIST_PRIVACY) {
-        writer.accept(this, generator, context, writeEmpty);
-      }
+      //for (WriterFunction<Player> writer: PROPERTIES_LIST_PRIVACY) {
+      //  writer.accept(this, generator, context, writeEmpty);
+      //}
     }
   }
 

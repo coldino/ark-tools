@@ -1,3 +1,5 @@
+.vscode
+
 #Maven
 target/
 pom.xml.tag
