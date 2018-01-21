@@ -103,6 +103,12 @@ public class Creature {
 
   public boolean isDead;
 
+  public boolean isBaby;
+
+  public int mutationsMaleLine;
+
+  public int mutationsFemaleLine;
+
   public Creature(GameObject creature, GameObjectContainer container) {
     className = creature.getClassName();
     CreatureData creatureData = DataManager.getCreature(creature.getClassString());
@@ -122,6 +128,8 @@ public class Creature {
     isFemale = creature.findPropertyValue("bIsFemale", Boolean.class).orElse(false);
 
     isDead = creature.findPropertyValue("bIsDead", Boolean.class).orElse(false);
+
+    isBaby = creature.findPropertyValue("bIsBaby", Boolean.class).orElse(false);
 
     for (int i = 0; i < 6; i++) {
       colorSetIndices[i] = creature.findPropertyValue("ColorSetIndices", ArkByteValue.class, i).map(ArkByteValue::getByteValue).orElse((byte) 0);
@@ -210,6 +218,10 @@ public class Creature {
     status = creature.findPropertyValue("MyCharacterStatusComponent", ObjectReference.class).map(container::getObject).orElse(null);
 
     inventory = creature.findPropertyValue("MyInventoryComponent", ObjectReference.class).map(container::getObject).orElse(null);
+
+    mutationsMaleLine = creature.findPropertyValue("RandomMutationsMale", Integer.class).orElse(0);
+
+    mutationsFemaleLine = creature.findPropertyValue("RandomMutationsFemale", Integer.class).orElse(0);
 
     if (status != null && status.getClassString().startsWith("DinoCharacterStatusComponent_")) {
       baseCharacterLevel = status.findPropertyValue("BaseCharacterLevel", Integer.class).orElse(1);
@@ -311,6 +323,21 @@ public class Creature {
     PROPERTIES.put("dead", (creature, generator, context, writeEmpty) -> {
       if (writeEmpty || creature.isDead) {
         generator.writeBooleanField("dead", creature.isDead);
+      }
+    });
+    PROPERTIES.put("baby", (creature, generator, context, writeEmpty) -> {
+      if (writeEmpty || creature.isBaby) {
+        generator.writeBooleanField("baby", creature.isBaby);
+      }
+    });
+    PROPERTIES.put("mutationsMaleLine", (creature, generator, context, writeEmpty) -> {
+      if (writeEmpty || creature.mutationsMaleLine != 0) {
+        generator.writeNumberField("mutationsMaleLine", creature.mutationsMaleLine);
+      }
+    });
+    PROPERTIES.put("mutationsFemaleLine", (creature, generator, context, writeEmpty) -> {
+      if (writeEmpty || creature.mutationsFemaleLine != 0) {
+        generator.writeNumberField("mutationsFemaleLine", creature.mutationsFemaleLine);
       }
     });
     PROPERTIES.put("colorSetIndices", (creature, generator, context, writeEmpty) -> {
