@@ -101,13 +101,15 @@ public class Creature {
 
   public GameObject inventory;
 
+  public boolean isDead;
+
   public Creature(GameObject creature, GameObjectContainer container) {
     className = creature.getClassName();
     CreatureData creatureData = DataManager.getCreature(creature.getClassString());
     type = creatureData != null ? creatureData.getName() : creature.getClassString();
 
     location = creature.getLocation();
-    
+
     int dinoID1 = creature.findPropertyValue("DinoID1", Integer.class).orElse(0);
     int dinoID2 = creature.findPropertyValue("DinoID2", Integer.class).orElse(0);
     dinoId = (long) dinoID1 << Integer.SIZE | (dinoID2 & 0xFFFFFFFFL);
@@ -118,6 +120,8 @@ public class Creature {
     owningPlayerId = creature.findPropertyValue("OwningPlayerID", Integer.class).orElse(0);
 
     isFemale = creature.findPropertyValue("bIsFemale", Boolean.class).orElse(false);
+
+    isDead = creature.findPropertyValue("bIsDead", Boolean.class).orElse(false);
 
     for (int i = 0; i < 6; i++) {
       colorSetIndices[i] = creature.findPropertyValue("ColorSetIndices", ArkByteValue.class, i).map(ArkByteValue::getByteValue).orElse((byte) 0);
@@ -302,6 +306,11 @@ public class Creature {
     PROPERTIES.put("female", (creature, generator, context, writeEmpty) -> {
       if (writeEmpty || creature.isFemale) {
         generator.writeBooleanField("female", creature.isFemale);
+      }
+    });
+    PROPERTIES.put("dead", (creature, generator, context, writeEmpty) -> {
+      if (writeEmpty || creature.isDead) {
+        generator.writeBooleanField("dead", creature.isDead);
       }
     });
     PROPERTIES.put("colorSetIndices", (creature, generator, context, writeEmpty) -> {
