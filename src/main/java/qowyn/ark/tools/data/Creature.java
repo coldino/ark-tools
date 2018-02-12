@@ -109,6 +109,8 @@ public class Creature {
 
   public int mutationsFemaleLine;
 
+  public boolean enableTamedWandering;
+
   public Creature(GameObject creature, GameObjectContainer container) {
     className = creature.getClassName();
     CreatureData creatureData = DataManager.getCreature(creature.getClassString());
@@ -130,6 +132,8 @@ public class Creature {
     isDead = creature.findPropertyValue("bIsDead", Boolean.class).orElse(false);
 
     isBaby = creature.findPropertyValue("bIsBaby", Boolean.class).orElse(false);
+
+    enableTamedWandering = creature.findPropertyValue("bEnableTamedWandering", Boolean.class).orElse(false);
 
     for (int i = 0; i < 6; i++) {
       colorSetIndices[i] = creature.findPropertyValue("ColorSetIndices", ArkByteValue.class, i).map(ArkByteValue::getByteValue).orElse((byte) 0);
@@ -328,6 +332,11 @@ public class Creature {
     PROPERTIES.put("baby", (creature, generator, context, writeEmpty) -> {
       if (writeEmpty || creature.isBaby) {
         generator.writeBooleanField("baby", creature.isBaby);
+      }
+    });
+    PROPERTIES.put("wandering", (creature, generator, context, writeEmpty) -> {
+      if (writeEmpty || creature.enableTamedWandering) {
+        generator.writeBooleanField("wandering", creature.enableTamedWandering);
       }
     });
     PROPERTIES.put("mutationsMaleLine", (creature, generator, context, writeEmpty) -> {
