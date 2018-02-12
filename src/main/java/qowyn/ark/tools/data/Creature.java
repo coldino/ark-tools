@@ -515,7 +515,7 @@ public class Creature {
     });
     PROPERTIES.put("tamingEffectivness", (creature, generator, context, writeEmpty) -> {
       if (writeEmpty || creature.tamedIneffectivenessModifier != 1.0f) {
-        generator.writeNumberField("tamingEffectivness", 1.0f - creature.tamedIneffectivenessModifier);
+        generator.writeNumberField("tamingEffectivness", 1.0f / (1 + creature.tamedIneffectivenessModifier));
       }
     });
     PROPERTIES.put("tamedFollowTarget", (creature, generator, context, writeEmpty) -> {
